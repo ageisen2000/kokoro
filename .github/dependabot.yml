@@ -1,7 +1,7 @@
 version: 2
 updates:
-  # Updates the pinned base image in the Dockerfile to newer nordwestt/kokoro-wyoming tags
-  - package-ecosystem: "docker"
+  # Keep pip dependencies current (wyoming, numpy, kokoro-onnx)
+  - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "weekly"
@@ -10,7 +10,7 @@ updates:
       prefix: "chore"
       include: "scope"
 
-  # Keep CI workflow actions up to date (actions/checkout, docker/setup-buildx-action, ...)
+  # Keep CI workflow actions up to date (actions/checkout, docker/build-push-action, ...)
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
