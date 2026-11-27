@@ -1,0 +1,38 @@
+name: cd
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    name: publish image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: log in to ghcr.io
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: build and push image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/ageisen2000/kokoro:latest
+            ghcr.io/ageisen2000/kokoro:${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/ageisen2000/kokoro
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.vendor=ageisen2000
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

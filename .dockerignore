@@ -1,0 +1,15 @@
+.git
+.gitignore
+.github
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.log
+node_modules
+__pycache__
+*.pyc
+.venv
+.DS_Store

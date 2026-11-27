@@ -1,0 +1,24 @@
+# Local secrets / environment — never commit these
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+.keystore
+.pem
+
+# Python / build artifacts
+__pycache__/
+*.pyc
+.venv/
+dist/
+build/
+node_modules/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.log

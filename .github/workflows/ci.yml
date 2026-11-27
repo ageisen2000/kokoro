@@ -1,0 +1,39 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  secrets:
+    name: no secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: gitleaks (scan full history)
+        run: |
+          docker run --rm -v "$PWD:/repo" \
+            ghcr.io/gitleaks/gitleaks@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f \
+            git -v --log-opts="--all" /repo
+
+  build:
+    name: image build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: build image
+        run: docker build -t ghcr.io/ageisen2000/kokoro:ci .
+
+      - name: smoke test (runtime imports, no GPU required)
+        run: |
+          set -euo pipefail
+          docker run --rm --entrypoint python3 ghcr.io/ageisen2000/kokoro:ci \
+            -c "import kokoro_onnx, wyoming; print('kokoro runtime imports OK')"

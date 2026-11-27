@@ -1,0 +1,21 @@
+version: 2
+updates:
+  # Updates the pinned base image in the Dockerfile to newer nordwestt/kokoro-wyoming tags
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+  # Keep CI workflow actions up to date (actions/checkout, docker/setup-buildx-action, ...)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "chore"
+      include: "scope"
